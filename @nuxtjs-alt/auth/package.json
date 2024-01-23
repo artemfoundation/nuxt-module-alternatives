@@ -1,6 +1,6 @@
 {
     "name": "@innodata/nuxtjs-alt-auth",
-    "version": "2.1.5",
+    "version": "2.1.6",
     "description": "An alternative module to @nuxtjs/auth",
     "homepage": "https://github.com/artemfoundation/nuxt-module-alternatives",
     "author": "innodata",
@@ -34,7 +34,7 @@
         "prepack": "unbuild"
     },
     "dependencies": {
-        "@nuxt/kit": "^3.0.0",
+        "@nuxt/kit": "^3.0.0-rc.11",
         "@innodata/nuxtjs-alt-http": "latest",
         "@pinia/nuxt": "latest",
         "body-parser": "latest",
@@ -46,9 +46,9 @@
         "pathe": "latest"
     },
     "devDependencies": {
-        "@nuxt/schema": "3.0.0",
+        "@nuxt/schema": "^3.0.0-rc.11",
         "fdir": "latest",
-        "nuxt": "^3.0.0",
+        "nuxt": "^3.0.0-rc.11",
         "unbuild": "latest",
         "typescript": "latest"
     },

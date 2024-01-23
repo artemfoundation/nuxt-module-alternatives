@@ -1,8 +1,8 @@
-import type { RefreshableScheme } from '../../types';
-import type { Storage } from '../core';
-import { addTokenPrefix } from '../../utils';
-import { TokenStatus } from './token-status';
-import jwtDecode, { JwtPayload } from 'jwt-decode';
+import type { RefreshableScheme } from "../../types";
+import type { Storage } from "../core";
+import { addTokenPrefix } from "../../utils";
+import { TokenStatus } from "./token-status";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 export class RefreshToken {
     scheme: RefreshableScheme;
@@ -20,7 +20,10 @@ export class RefreshToken {
     }
 
     set(tokenValue: string | boolean): string | boolean {
-        const refreshToken = addTokenPrefix(tokenValue, this.scheme.options.refreshToken.type);
+        const refreshToken = addTokenPrefix(
+            tokenValue,
+            this.scheme.options.refreshToken.type
+        );
 
         this.#setToken(refreshToken);
         this.#updateExpiration(refreshToken);
@@ -45,19 +48,25 @@ export class RefreshToken {
     }
 
     #getExpiration(): number | false {
-        const key = this.scheme.options.refreshToken.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.refreshToken.expirationPrefix +
+            this.scheme.name;
 
         return this.$storage.getUniversal(key) as number | false;
     }
 
     #setExpiration(expiration: number | false): number | false {
-        const key = this.scheme.options.refreshToken.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.refreshToken.expirationPrefix +
+            this.scheme.name;
 
         return this.$storage.setUniversal(key, expiration) as number | false;
     }
 
     #syncExpiration(): number | false {
-        const key = this.scheme.options.refreshToken.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.refreshToken.expirationPrefix +
+            this.scheme.name;
 
         return this.$storage.syncUniversal(key) as number | false;
     }
@@ -65,16 +74,21 @@ export class RefreshToken {
     #updateExpiration(refreshToken: string | boolean): number | false | void {
         let refreshTokenExpiration: number;
         const tokenIssuedAtMillis = Date.now();
-        const tokenTTLMillis = Number(this.scheme.options.refreshToken.maxAge) * 1000;
-        const tokenExpiresAtMillis = tokenTTLMillis ? tokenIssuedAtMillis + tokenTTLMillis : 0;
+        const tokenTTLMillis =
+            Number(this.scheme.options.refreshToken.maxAge) * 1000;
+        const tokenExpiresAtMillis = tokenTTLMillis
+            ? tokenIssuedAtMillis + tokenTTLMillis
+            : 0;
 
         try {
-            refreshTokenExpiration = jwtDecode<JwtPayload>(refreshToken as string).exp! * 1000 || tokenExpiresAtMillis;
+            refreshTokenExpiration =
+                jwtDecode<JwtPayload>(refreshToken as string).exp! * 1000 ||
+                tokenExpiresAtMillis;
         } catch (error: any) {
             // If the token is not jwt, we can't decode and refresh it, use tokenExpiresAt value
             refreshTokenExpiration = tokenExpiresAtMillis;
 
-            if (!((error && error.name === 'InvalidTokenError'))) {
+            if (!(error && error.name === "InvalidTokenError")) {
                 throw error;
             }
         }
@@ -86,7 +100,9 @@ export class RefreshToken {
     #setToken(refreshToken: string | boolean): string | boolean {
         const key = this.scheme.options.refreshToken.prefix + this.scheme.name;
 
-        return this.$storage.setUniversal(key, refreshToken) as string | boolean;
+        return this.$storage.setUniversal(key, refreshToken) as
+            | string
+            | boolean;
     }
 
     #syncToken(): string | boolean {

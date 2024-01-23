@@ -1,12 +1,8 @@
-import Module from '..'
+import Module from "..";
 
 export default defineNuxtConfig({
-    modules: [
-        Module,
-        "@nuxtjs-alt/http",
-        "@pinia/nuxt",
-    ],
+    modules: [Module, "@innodata/nuxtjs-alt-http", "@pinia/nuxt"],
     auth: {
         enableMiddleware: false,
-    }
+    },
 });

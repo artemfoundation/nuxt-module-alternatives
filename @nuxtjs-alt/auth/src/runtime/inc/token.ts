@@ -1,9 +1,8 @@
-import type { JwtPayload } from 'jwt-decode';
-import type { TokenableScheme } from '../../types';
-import type { Storage } from '../core';
-import { addTokenPrefix } from '../../utils';
-import { TokenStatus } from './token-status';
-import decode from 'jwt-decode';
+import { jwtDecode, JwtPayload } from "jwt-decode";
+import type { TokenableScheme } from "../../types";
+import type { Storage } from "../core";
+import { addTokenPrefix } from "../../utils";
+import { TokenStatus } from "./token-status";
 
 export class Token {
     scheme: TokenableScheme;
@@ -20,13 +19,19 @@ export class Token {
         return this.$storage.getUniversal(key) as string | boolean;
     }
 
-    set(tokenValue: string | boolean, expiresIn: number | boolean = false): string | boolean {
-        const token = addTokenPrefix(tokenValue, this.scheme.options.token!.type);
+    set(
+        tokenValue: string | boolean,
+        expiresIn: number | boolean = false
+    ): string | boolean {
+        const token = addTokenPrefix(
+            tokenValue,
+            this.scheme.options.token!.type
+        );
 
         this.#setToken(token);
         this.#updateExpiration(token, expiresIn);
 
-        if (typeof token === 'string') {
+        if (typeof token === "string") {
             this.scheme.requestHandler.setHeader(token);
         }
 
@@ -37,7 +42,7 @@ export class Token {
         const token = this.#syncToken();
         this.#syncExpiration();
 
-        if (typeof token === 'string') {
+        if (typeof token === "string") {
             this.scheme.requestHandler.setHeader(token);
         }
 
@@ -55,38 +60,49 @@ export class Token {
     }
 
     #getExpiration(): number | false {
-        const key = this.scheme.options.token!.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.token!.expirationPrefix + this.scheme.name;
 
         return this.$storage.getUniversal(key) as number | false;
     }
 
     #setExpiration(expiration: number | false): number | false {
-        const key = this.scheme.options.token!.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.token!.expirationPrefix + this.scheme.name;
 
         return this.$storage.setUniversal(key, expiration) as number | false;
     }
 
     #syncExpiration(): number | false {
-        const key = this.scheme.options.token!.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.token!.expirationPrefix + this.scheme.name;
 
         return this.$storage.syncUniversal(key) as number | false;
     }
 
-    #updateExpiration(token: string | boolean, expiresIn: number | boolean): number | false | void {
+    #updateExpiration(
+        token: string | boolean,
+        expiresIn: number | boolean
+    ): number | false | void {
         let tokenExpiration: number;
         const tokenIssuedAtMillis = Date.now();
-        const maxAge = expiresIn ? expiresIn : this.scheme.options.token!.maxAge
-        const tokenTTLMillis = Number(maxAge) * 1000
-        const tokenExpiresAtMillis = tokenTTLMillis ? tokenIssuedAtMillis + tokenTTLMillis : 0;
+        const maxAge = expiresIn
+            ? expiresIn
+            : this.scheme.options.token!.maxAge;
+        const tokenTTLMillis = Number(maxAge) * 1000;
+        const tokenExpiresAtMillis = tokenTTLMillis
+            ? tokenIssuedAtMillis + tokenTTLMillis
+            : 0;
 
         try {
-            tokenExpiration = decode<JwtPayload>(token as string).exp! * 1000 || tokenExpiresAtMillis;
-        } 
-        catch (error: any) {
+            tokenExpiration =
+                jwtDecode<JwtPayload>(token as string).exp! * 1000 ||
+                tokenExpiresAtMillis;
+        } catch (error: any) {
             // If the token is not jwt, we can't decode and refresh it, use tokenExpiresAt value
             tokenExpiration = tokenExpiresAtMillis;
 
-            if (!(error && error.name === 'InvalidTokenError')) {
+            if (!(error && error.name === "InvalidTokenError")) {
                 throw error;
             }
         }

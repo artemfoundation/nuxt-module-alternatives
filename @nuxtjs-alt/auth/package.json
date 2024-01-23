@@ -1,9 +1,9 @@
 {
-    "name": "@nuxtjs-alt/auth",
+    "name": "@innodata/nuxtjs-alt-auth",
     "version": "2.1.5",
     "description": "An alternative module to @nuxtjs/auth",
-    "homepage": "https://github.com/Teranode/nuxt-module-alternatives",
-    "author": "Teranode",
+    "homepage": "https://github.com/artemfoundation/nuxt-module-alternatives",
+    "author": "innodata",
     "keywords": [
         "nuxt",
         "nuxtjs",
@@ -35,7 +35,7 @@
     },
     "dependencies": {
         "@nuxt/kit": "^3.0.0",
-        "@nuxtjs-alt/http": "latest",
+        "@innodata/nuxtjs-alt-http": "latest",
         "@pinia/nuxt": "latest",
         "body-parser": "latest",
         "cookie-es": "latest",
@@ -49,14 +49,15 @@
         "@nuxt/schema": "3.0.0",
         "fdir": "latest",
         "nuxt": "^3.0.0",
-        "unbuild": "latest"
+        "unbuild": "latest",
+        "typescript": "latest"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Teranode/nuxt-module-alternatives.git",
+        "url": "git+https://github.com/artemfoundation/nuxt-module-alternatives.git",
         "directory": "@nuxtjs-alt/auth"
     },
     "bugs": {
-        "url": "https://github.com/Teranode/nuxt-module-alternatives/issues"
+        "url": "https://github.com/artemfoundation/nuxt-module-alternatives/issues"
     }
 }

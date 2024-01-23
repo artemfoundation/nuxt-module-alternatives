@@ -1,8 +1,8 @@
-import decode, { JwtPayload } from 'jwt-decode';
-import { addTokenPrefix } from '../../utils';
-import type { IdTokenableScheme } from '../../types';
-import type { Storage } from '../core';
-import { TokenStatus } from './token-status';
+import { jwtDecode, JwtPayload } from "jwt-decode";
+import { addTokenPrefix } from "../../utils";
+import type { IdTokenableScheme } from "../../types";
+import type { Storage } from "../core";
+import { TokenStatus } from "./token-status";
 
 export class IdToken {
     scheme: IdTokenableScheme;
@@ -20,7 +20,10 @@ export class IdToken {
     }
 
     set(tokenValue: string | boolean): string | boolean {
-        const idToken = addTokenPrefix(tokenValue, this.scheme.options.idToken.type);
+        const idToken = addTokenPrefix(
+            tokenValue,
+            this.scheme.options.idToken.type
+        );
 
         this.#setToken(idToken);
         this.#updateExpiration(idToken);
@@ -45,13 +48,15 @@ export class IdToken {
     }
 
     #getExpiration(): number | false {
-        const key = this.scheme.options.idToken.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.idToken.expirationPrefix + this.scheme.name;
 
         return this.$storage.getUniversal(key) as number | false;
     }
 
     #setExpiration(expiration: number | false): number | false {
-        const key = this.scheme.options.idToken.expirationPrefix + this.scheme.name;
+        const key =
+            this.scheme.options.idToken.expirationPrefix + this.scheme.name;
 
         return this.$storage.setUniversal(key, expiration) as number | false;
     }
@@ -66,17 +71,21 @@ export class IdToken {
     #updateExpiration(idToken: string | boolean): number | false | void {
         let idTokenExpiration: number;
         const tokenIssuedAtMillis = Date.now();
-        const tokenTTLMillis = Number(this.scheme.options.idToken.maxAge) * 1000;
-        const tokenExpiresAtMillis = tokenTTLMillis ? tokenIssuedAtMillis + tokenTTLMillis : 0;
+        const tokenTTLMillis =
+            Number(this.scheme.options.idToken.maxAge) * 1000;
+        const tokenExpiresAtMillis = tokenTTLMillis
+            ? tokenIssuedAtMillis + tokenTTLMillis
+            : 0;
 
         try {
-            idTokenExpiration = decode<JwtPayload>(idToken as string).exp! * 1000 || tokenExpiresAtMillis;
-        } 
-        catch (error: any) {
+            idTokenExpiration =
+                jwtDecode<JwtPayload>(idToken as string).exp! * 1000 ||
+                tokenExpiresAtMillis;
+        } catch (error: any) {
             // If the token is not jwt, we can't decode and refresh it, use tokenExpiresAt value
             idTokenExpiration = tokenExpiresAtMillis;
 
-            if (!(error && error.name === 'InvalidTokenError')) {
+            if (!(error && error.name === "InvalidTokenError")) {
                 throw error;
             }
         }
@@ -99,8 +108,8 @@ export class IdToken {
 
     userInfo() {
         const idToken = this.get();
-        if (typeof idToken === 'string') {
-            return decode(idToken);
+        if (typeof idToken === "string") {
+            return jwtDecode(idToken);
         }
     }
 }

@@ -8,21 +8,21 @@ Please note, any issues regarding typescript is not a priorty for me. If you're 
 
 **Refactored (Version 2.0.0+)**
 
-The module now requires '@nuxtjs-alt/http' to function in version 2.0.0 and up, that module extends ohmyfetch. Please note that if you were using `data` to post data, you now need to use `body` since this is what `ohmyfetch` uses.
+The module now requires '@innodata/nuxtjs-alt-http' to function in version 2.0.0 and up, that module extends ohmyfetch. Please note that if you were using `data` to post data, you now need to use `body` since this is what `ohmyfetch` uses.
 Please tell me if you encounter any issues with these changes.
 
 **Composable**
 
-A `useAuth()` composable is available to utitlize if `$auth` from `useNuxtApp()` isnt working out for you in terms of type hinting. 
+A `useAuth()` composable is available to utitlize if `$auth` from `useNuxtApp()` isnt working out for you in terms of type hinting.
 
 **Options/Extra Features**
 
 Besides what nuxt auth normally offers, here are some other options/changes
 
-- `globalMiddleware`: `boolean` (Default: false) - Enables/disables the middleware to be used globally
-- `enableMiddleware`: `boolean` (Default: true) - Enables/disables the built-in middleware
-- `pinia.namespace`: `string` (Default: 'auth') - Changed from vuex to pinia, this is the namespace to use for the pinia store
-- `sessionStorage`: `string|false` (Default: 'auth.') - Similar to the localstorage option, there is a session storage options available for you to use.
+-   `globalMiddleware`: `boolean` (Default: false) - Enables/disables the middleware to be used globally
+-   `enableMiddleware`: `boolean` (Default: true) - Enables/disables the built-in middleware
+-   `pinia.namespace`: `string` (Default: 'auth') - Changed from vuex to pinia, this is the namespace to use for the pinia store
+-   `sessionStorage`: `string|false` (Default: 'auth.') - Similar to the localstorage option, there is a session storage options available for you to use.
 
 **Cookie-based auth**
 
@@ -41,13 +41,13 @@ the config would look like this
                 },
                 endpoints: {
                     csrf: false,
-                    login: { 
-                        url: '/api/user/login', 
-                        method: 'post' 
+                    login: {
+                        url: '/api/user/login',
+                        method: 'post'
                     },
-                    user: { 
-                        url: '/api/user/me', 
-                        method: 'get' 
+                    user: {
+                        url: '/api/user/me',
+                        method: 'get'
                     }
                 },
                 user: {
@@ -79,17 +79,17 @@ Laravel Sanctum wokrs a tiny bit differently, It inherits the same config as the
                     name: 'XSRF-TOKEN',
                 },
                 endpoints: {
-                    csrf: { 
-                        url: '/sanctum/csrf-cookie' 
+                    csrf: {
+                        url: '/sanctum/csrf-cookie'
                     },
-                    login: { 
-                        url: '/login' 
+                    login: {
+                        url: '/login'
                     },
-                    logout: { 
-                        url: '/logout' 
+                    logout: {
+                        url: '/logout'
                     },
-                    user: { 
-                        url: '/api/user' 
+                    user: {
+                        url: '/api/user'
                     }
                 },
                 user: {
@@ -108,13 +108,15 @@ Laravel Sanctum wokrs a tiny bit differently, It inherits the same config as the
 
 Oauth2 now has client window authentication thanks to this pull request: https://github.com/nuxt-community/auth-module/pull/1746
 properties have been changed to:
-- `clientWindow`: `boolean`
-- `clientWindowWidth`: `number`
-- `clientWindowHeight`: `number`
+
+-   `clientWindow`: `boolean`
+-   `clientWindowWidth`: `number`
+-   `clientWindowHeight`: `number`
 
 **Aliases**
 
 Available Aliases:
-- `#auth/runtime`
-- `#auth/utils`
-- `#auth/providers`
+
+-   `#auth/runtime`
+-   `#auth/utils`
+-   `#auth/providers`
